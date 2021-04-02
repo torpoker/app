@@ -146,6 +146,7 @@ class JoinList(QMainWindow):
         self.ui.tableWidget_game_tables.setSizePolicy(size_policy)
         self.ui.tableWidget_game_tables.setVisible(False)
         self.ui.pushButton_refresh_account.clicked.connect(self.refresh_account)
+        self.ui.pushButton_cashout.clicked.connect(self.cash_out)
 
         self.unit = ""  # to be filled after successful call of /json/tables
 
@@ -315,10 +316,8 @@ class JoinList(QMainWindow):
         self.ui.label_username.setText(name)
 
         if int(stack_value) >= 100:  # cash out when stack value more than or equal to 100
-            self.ui.pushButton_cashout.clicked.connect(self.cash_out)
             self.ui.pushButton_cashout.setText("Cashout")
         else:
-            self.ui.pushButton_cashout.clicked.connect(self.cash_out)
             self.ui.pushButton_cashout.setText("Logout")
 
         self.ui.pushButton_cashout.setStatusTip(self.ui.pushButton_cashout.text())
