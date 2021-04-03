@@ -36,7 +36,7 @@ def resp_header_parse(resp_bytes: bytes, do_return: bool = False, captcha: bool 
 
 
 def header_to_json(header_string):
-    reg_pattern = "(.+)\:\ ?(.+?)\;"
+    reg_pattern = "(.+)\:\ (.+?)\;"
     match_list = re.findall(reg_pattern, header_string, re.M)
     header_dict = {}
     if match_list:
