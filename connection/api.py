@@ -15,21 +15,21 @@ class API:
         self.host = host
         self.RUNTIME_COOKIE = RUNTIME_COOKIE
         self.redirect = False
-
+    
     def set_cookie(self, cookie_value):  # used to deal with setting of cookies for the whole session
         self.RUNTIME_COOKIE = cookie_value
-
+    
     def get_cookie(self):
         return self.RUNTIME_COOKIE
-
+    
     def make_request(self, request_bytes: bytes, return_header=False):
-        resp_bytes = handle_connections.request(request_bytes, self.host, self.port, self.tls, self.socks5,
-                                                self.socks5_ip, self.socks5_port)
+        resp_bytes, status_code = handle_connections.request(request_bytes, self.host, self.port, self.tls, self.socks5,
+                                                             self.socks5_ip, self.socks5_port)
         header_string, resp = parse_raw_header.resp_header_parse(resp_bytes, do_return=True)
         if return_header:
             return header_string, resp
         return resp
-
+    
     def api_call(self, request_alias: str, payload: bytes = None, params=None):
         if params is None:
             params = {}
@@ -66,7 +66,7 @@ Connection: close\r
             request_bytes = request.format(
                 host=self.host
             ).encode('utf-8')
-
+            
             header_string, resp = self.make_request(request_bytes, return_header=True)
             if header_string and not self.RUNTIME_COOKIE:
                 header_json = parse_raw_header.header_to_json(header_string)
@@ -114,8 +114,9 @@ Connection: close\r
                 host=self.host,
                 cookie=self.RUNTIME_COOKIE
             ).encode('utf-8')
-            resp_bytes = handle_connections.request(request_bytes, self.host, self.port, self.tls, self.socks5,
-                                                    self.socks5_ip, self.socks5_port)
+            resp_bytes, status_code = handle_connections.request(request_bytes, self.host, self.port, self.tls,
+                                                                 self.socks5,
+                                                                 self.socks5_ip, self.socks5_port)
             header_string, image_data = parse_raw_header.resp_header_parse(resp_bytes, do_return=False, captcha=True)
             if header_string and image_data:
                 return image_data
