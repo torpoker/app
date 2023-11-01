@@ -41,3 +41,9 @@ $ python3 run_torpoker.py
 Torpoker's official servers are as follows:
 - torpoker766qetslucfe2jrq7wz63r4tt5vn4pznq5crzniin5up65id.onion port 80
 - torpoker.gg port 443
+
+
+## Testrun for Developer:
+-If you want to do a test run to check whether the workflow works, 
+you have to start the test_workflow script in the test_files folder.
+

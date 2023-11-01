@@ -1,8 +1,8 @@
 from typing import Dict
-
 from PyQt5 import QtCore
-
 from connection import api
+#New Imports
+from test_files.logging_handler import log_api
 
 
 class RequestThread(QtCore.QObject):
@@ -24,9 +24,21 @@ class RequestThread(QtCore.QObject):
         self.fetch_response()
 
     def fetch_response(self):
+
         try:
+            # Log the request
+            log_api(f'Sending request with params: {self.api_params}')
+
             resp = self.api_obj.api_call(*self.api_params)
+
+            # Log the response
+            log_api(f'Received response: {resp}')
+
+
+            # Emit the response
             self.resp.emit([resp])
             self.complete.emit()
         except Exception as e:
+            # Log any exceptions
+            log_api(f'Error in fetch_response: {e}')
             self.error_signal.emit()
