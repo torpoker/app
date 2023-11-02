@@ -31,9 +31,9 @@ ERROR_POPUP_TITLE = "ERROR"
 TABLE_REFRESH_TIME = 15
 PROGRESS_BAR_MAX = 120
 
-BEEP_SOUND_FILE = "src/UI/sounds/beep-26.wav"
-MUTE_ICON = "src/UI/images/fkzfaalief3i.png"
-UNMUTE_ICON = "src/UI/images/dhezhynokidy.png"
+BEEP_SOUND_FILE = "UI/sounds/beep-26.wav"
+MUTE_ICON = "UI/images/fkzfaalief3i.png"
+UNMUTE_ICON = "UI/images/dhezhynokidy.png"
 
 
 def beep_sound():

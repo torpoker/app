@@ -38,7 +38,7 @@ def add_row_all_table(table_widget):
 
 
 def set_button_style(button: QPushButton):
-    button.setIcon(QIcon("src/UI/images/khaw432.png"))
+    button.setIcon(QIcon("UI/images/khaw432.png"))
     button.setIconSize(QSize(16, 16))
     return button
 

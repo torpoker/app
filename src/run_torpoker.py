@@ -15,7 +15,9 @@ from src.UI import home_page
 from src.UI_Utils import JoinList
 from src.UI_Utils import RequestThread
 
-CARDS_DIRECTORY = 'src/UI/images/41x60/'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CARDS_DIRECTORY = os.path.join(BASE_DIR, 'UI', 'images', '41x60')
+
 CARDS = {}
 
 

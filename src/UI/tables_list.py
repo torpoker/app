@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
         MainWindow.setMinimumSize(QtCore.QSize(800, 656))
         MainWindow.setStyleSheet("#centralwidget{\n"
 "background-color: rgb(85, 87, 83);\n"
-"    border-image: url(./src/UI/images/TgFZH.jpg);\n"
+"    border-image: url(./UI/images/TgFZH.jpg);\n"
 "}\n"
 "QStatusBar\n"
 "{\n"
@@ -53,7 +53,7 @@ class Ui_MainWindow(object):
 "}\n"
 "QTableView::item{\n"
 "    color: white;\n"
-"    background-image: url(./src/UI/images/asd1354.png); /*cell bg image*/\n"
+"    background-image: url(./UI/images/asd1354.png); /*cell bg image*/\n"
 "}\n"
 "QTableWidget::item{\n"
 "    padding-left: 15; /*cell spacing*/\n"
@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         self.label.setMinimumSize(QtCore.QSize(424, 50))
         self.label.setMaximumSize(QtCore.QSize(516, 94))
         self.label.setText("")
-        self.label.setPixmap(QtGui.QPixmap("./src/UI/images/YfZiodQJx.png"))
+        self.label.setPixmap(QtGui.QPixmap("./UI/images/YfZiodQJx.png"))
         self.label.setScaledContents(True)
         self.label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.label.setWordWrap(False)
@@ -125,7 +125,7 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_playnow.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("./src/UI/images/SIdWGYLm.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("./UI/images/SIdWGYLm.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_playnow.setIcon(icon)
         self.pushButton_playnow.setIconSize(QtCore.QSize(100, 100))
         self.pushButton_playnow.setObjectName("pushButton_playnow")
@@ -163,7 +163,7 @@ class Ui_MainWindow(object):
         self.label_3 = QtWidgets.QLabel(self.frame)
         self.label_3.setMaximumSize(QtCore.QSize(25, 16777215))
         self.label_3.setText("")
-        self.label_3.setPixmap(QtGui.QPixmap("./src/UI/images/PKlFdpHZ.png"))
+        self.label_3.setPixmap(QtGui.QPixmap("./UI/images/PKlFdpHZ.png"))
         self.label_3.setObjectName("label_3")
         self.horizontalLayout.addWidget(self.label_3)
         self.label_2 = QtWidgets.QLabel(self.frame)
@@ -198,7 +198,7 @@ class Ui_MainWindow(object):
         self.label_4.setMinimumSize(QtCore.QSize(27, 28))
         self.label_4.setMaximumSize(QtCore.QSize(27, 28))
         self.label_4.setText("")
-        self.label_4.setPixmap(QtGui.QPixmap("./src/UI/images/2aewqeE.png"))
+        self.label_4.setPixmap(QtGui.QPixmap("./UI/images/2aewqeE.png"))
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_2.addWidget(self.label_4)
         self.label_stack = QtWidgets.QLabel(self.frame_2)
@@ -222,7 +222,7 @@ class Ui_MainWindow(object):
 "    margin-top: 5px;\n"
 "}")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("./src/UI/images/UGAyPsHIM.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap("./UI/images/UGAyPsHIM.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_cashout.setIcon(icon1)
         self.pushButton_cashout.setObjectName("pushButton_cashout")
         self.gridLayout_2.addWidget(self.pushButton_cashout, 2, 0, 1, 2)
@@ -239,13 +239,13 @@ class Ui_MainWindow(object):
 "}")
         self.pushButton_refresh_account.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("./src/UI/images/weq23AD.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap("./UI/images/weq23AD.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.pushButton_refresh_account.setIcon(icon2)
         self.pushButton_refresh_account.setObjectName("pushButton_refresh_account")
         self.gridLayout_2.addWidget(self.pushButton_refresh_account, 2, 2, 1, 1)
         self.label_user_icon = QtWidgets.QLabel(self.frame_2)
         self.label_user_icon.setText("")
-        self.label_user_icon.setPixmap(QtGui.QPixmap("./src/UI/images/ksdfvQWC.png"))
+        self.label_user_icon.setPixmap(QtGui.QPixmap("./UI/images/ksdfvQWC.png"))
         self.label_user_icon.setObjectName("label_user_icon")
         self.gridLayout_2.addWidget(self.label_user_icon, 0, 0, 2, 1)
         self.label_username = QtWidgets.QLabel(self.frame_2)
