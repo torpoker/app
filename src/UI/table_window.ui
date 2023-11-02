@@ -45,7 +45,7 @@ QStatusBar::item
 #centralwidget{
 	
 	background-color: rgb(46, 52, 54);
-	border-image: url(./UI/images/TgFZH.jpg);
+	border-image: url(./src/UI/images/TgFZH.jpg);
 }
 QProgressBar {
 background-color: rgb(255, 255, 255);
@@ -3460,7 +3460,7 @@ padding: 10px 2px 2px 10px;
     </property>
     <property name="styleSheet">
      <string notr="true">#frame_board{
-border-image: url(./UI/images/FJKdWJ.png);
+border-image: url(./src/UI/images/FJKdWJ.png);
 border: none;
 }</string>
     </property>

@@ -11,10 +11,11 @@ try:
     from PyQt5 import QtCore
 except ImportError:
     sys.exit("PyQt5 has not been found. Setup process can be found on README")
-from UI import home_page
-from UI_Utils import JoinList, RequestThread
+from src.UI import home_page
+from src.UI_Utils import JoinList
+from src.UI_Utils import RequestThread
 
-CARDS_DIRECTORY = 'UI/images/41x60/'
+CARDS_DIRECTORY = 'src/UI/images/41x60/'
 CARDS = {}
 
 

@@ -663,7 +663,7 @@ QStatusBar::item
 	
 	background-color: qlineargradient(spread:pad, x1:0.489, y1:0.0113636, x2:0.506, y2:1, stop:0 rgba(72, 72, 72, 255), stop:1 rgba(30, 30, 30, 255));
 	
-	border-image: url(./UI/images/TgFZH.jpg);
+	border-image: url(./src/UI/images/TgFZH.jpg);
 }
 QLabel{
 	color: white;

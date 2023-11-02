@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QApplication
 
-from UI_Utils.JoinList import IPPop
+from src.UI_Utils.JoinList import IPPop
 
 
 def find_button_with_object_name(object_name):

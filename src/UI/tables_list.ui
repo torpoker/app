@@ -22,7 +22,7 @@
   <property name="styleSheet">
    <string notr="true">#centralwidget{
 background-color: rgb(85, 87, 83);
-	border-image: url(./UI/images/TgFZH.jpg);
+	border-image: url(./src/UI/images/TgFZH.jpg);
 }
 QStatusBar
 {
@@ -103,7 +103,7 @@ QTableWidget{
 }
 QTableView::item{
 	color: white;
-	background-image: url(./UI/images/asd1354.png); /*cell bg image*/
+	background-image: url(./src/UI/images/asd1354.png); /*cell bg image*/
 }
 QTableWidget::item{
 	padding-left: 15; /*cell spacing*/

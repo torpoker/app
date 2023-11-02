@@ -8,12 +8,13 @@ from PyQt5.QtWidgets import (QMainWindow, QTableWidgetItem, QDialog, QLabel, QPu
                              QPlainTextEdit,
                              QVBoxLayout)
 
-from UI import tables_list, popup
-from UI_Utils import table_handling, PokerTable, RequestThread
-from UI_Utils.alert import show_message, show_error_message, show_request_status
-from UI_Utils.captcha_verification import CaptchaDialog
-from UI_Utils.deposit_verification import BtcDeposit
-from connection import api
+from src.UI import tables_list, popup
+from src.UI_Utils import table_handling
+from src.UI_Utils import RequestThread, PokerTable
+from src.UI_Utils.alert import show_message, show_error_message, show_request_status
+from src.UI_Utils.captcha_verification import CaptchaDialog
+from src.UI_Utils.deposit_verification import BtcDeposit
+from src.connection import api
 
 ERROR_MSG = "<h3>Error</h3>"
 ERROR_POPUP_TITLE = "ERROR"
@@ -263,7 +264,7 @@ class JoinList(QMainWindow):
         Refresh user account status
         """
         self.request_acc = RequestThread.RequestThread(params=('GET /json/account', None, None), call_dict=None,
-                                                    api_obj=self.api)
+                                                       api_obj=self.api)
         if not hasattr(self, 'request_thread'):  # don't spawn new thread if there's already one
             self.request_thread = QtCore.QThread()
             self.thread_pool.append(self.request_thread)

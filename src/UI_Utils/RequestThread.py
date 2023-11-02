@@ -1,6 +1,6 @@
 from typing import Dict
 from PyQt5 import QtCore
-from connection import api
+from src.connection import api
 #New Imports
 from test_files.logging_handler import log_api
 

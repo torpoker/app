@@ -241,7 +241,7 @@ class Ui_MainWindow(object):
 "    \n"
 "    background-color: qlineargradient(spread:pad, x1:0.489, y1:0.0113636, x2:0.506, y2:1, stop:0 rgba(72, 72, 72, 255), stop:1 rgba(30, 30, 30, 255));\n"
 "    \n"
-"    border-image: url(./UI/images/TgFZH.jpg);\n"
+"    border-image: url(./src/UI/images/TgFZH.jpg);\n"
 "}\n"
 "QLabel{\n"
 "    color: white;\n"
@@ -551,7 +551,7 @@ class Ui_MainWindow(object):
         self.label_logo.setMaximumSize(QtCore.QSize(16777215, 100))
         self.label_logo.setStyleSheet("background-color: white;")
         self.label_logo.setText("")
-        self.label_logo.setPixmap(QtGui.QPixmap("./UI/images/YfZiodQJx.png"))
+        self.label_logo.setPixmap(QtGui.QPixmap("./src/UI/images/YfZiodQJx.png"))
         self.label_logo.setAlignment(QtCore.Qt.AlignCenter)
         self.label_logo.setObjectName("label_logo")
         self.gridLayout_2.addWidget(self.label_logo, 0, 0, 1, 4)
