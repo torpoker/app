@@ -24,6 +24,7 @@
 ```sh
 $ python3 -m pip install --upgrade pip setuptools wheel
 $ python3 -m pip install PyQt5
+$ python3 -m pip install logging
 ```
 For debian-based install using `apt-get install python3-pyqt5`
 - [**Important:** For windows and Mac OS, `certifi` is required for TLS connections]
@@ -34,7 +35,7 @@ For debian-based install using `apt-get install python3-pyqt5`
 ### Usage
 After installing the required packages, to launch Torpoker, run the following command from terminal:
 ```sh
-$ python3 run_torpoker.py
+$ python3 src/run_torpoker.py
 ```
 
 ## Official Servers:
@@ -47,3 +48,6 @@ Torpoker's official servers are as follows:
 -If you want to do a test run to check whether the workflow works, 
 you have to start the test_workflow script in the test_files folder.
 
+## Testrun:
+- to launch the test, run the following command from terminal:
+- $ python3 test_files/test_workflow.py
