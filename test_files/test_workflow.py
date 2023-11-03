@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QTimer, QCoreApplication
@@ -5,7 +7,7 @@ from PyQt5.QtCore import QTimer, QCoreApplication
 from src.run_torpoker import AppHome
 from PyQt5 import QtCore
 from unittest.mock import patch
-from test_files.help_functions import find_button_with_object_name, find_button_with_text, find_IPPop_dialog
+from test_files.help_functions import find_button_with_object_name, find_button_with_text, find_IPPop_dialog, read_file_as_json
 from test_files.api_v1 import MOCKED_TABLE_STATE_RESPONSE, \
     MOCKED_CONFIRM_RESPONSE, MOCKED_CALL_RESPONSE, MOCKED_TABLE_STATE_AFTER_CALL_RESPONSE, \
     MOCKED_TABLE_STATE_AFTER_ENEMY_CHECK_RESPONSE, MOCKED_TABLE_STATE_AFTER_FLOP_RESPONSE, MOCKED_CHECK_RESPONSE, \
@@ -14,6 +16,7 @@ from test_files.api_v1 import MOCKED_TABLE_STATE_RESPONSE, \
     MOCKED_TABLE_STATE_NEW_ROUND, MOCKED_ACCOUNT_RESPONSE_AFTER_LEAVE, MOCKED_QUIT_TABLE_RESPONSE, \
     MOCKED_CASHOUT_RESPONSE, MOCKED_TABLE_STATUS_AFTER_MESSAGE, MOCKED_TABLES_RESPONSE, MOCKED_ACCOUNT_INFO_RESPONSE, \
     MOCKED_SEND_COMPLETED_RESPONSE, MOCKED_SEND_POST_RESPONSE, MOCKED_JOIN_TABLE_RESPONSE, MOCKED_ACCOUNT_RESPONSE
+
 
 
 
@@ -40,11 +43,16 @@ def test_click_logging(qtbot, app):
     qtbot.wait(1500)
     window.ui.lineEdit_address_port.setText("443")
 
+    MOCKED_ACCOUNT_RESPONSE= read_file_as_json("apiV1/mocked_account_response.txt")
+    MOCKED_ACCOUNT_INFO_RESPONSE = read_file_as_json("apiV1/mocked_account_info_response.txt")
+    MOCKED_TABLES_RESPONSE = read_file_as_json("apiV1/mocked_tables_response.txt")
+
+
     # Start the mocking for API calls
     with patch('src.connection.api.API.api_call', side_effect=[MOCKED_ACCOUNT_RESPONSE, MOCKED_TABLES_RESPONSE]):
         # Click on the connect button
         qtbot.mouseClick(window.ui.pushButton_connect, QtCore.Qt.LeftButton)  # Click on the button
-        qtbot.wait(1500)  # Wait a moment for the Captcha dialog to load
+        qtbot.wait(150000)  # Wait a moment for the Captcha dialog to load
 
     play_now_button = window.table_list.ui.pushButton_playnow
     qtbot.mouseClick(play_now_button, QtCore.Qt.LeftButton)

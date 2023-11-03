@@ -360,5 +360,3 @@ MOCKED_TABLE_STATUS_AFTER_MESSAGE = {
         }
     ]
 }
-
-

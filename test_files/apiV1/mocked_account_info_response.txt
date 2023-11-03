@@ -1,0 +1,4 @@
+{
+    "account": {"name": "anonymous", "stack": 30}
+}
+
