@@ -1,0 +1,1 @@
+{"table": 27, "min": 30, "max": 200, "redirect": false}

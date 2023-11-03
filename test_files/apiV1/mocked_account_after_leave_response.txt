@@ -1,0 +1,1 @@
+{"account": {"name": "anonymous", "stack": 25}}
