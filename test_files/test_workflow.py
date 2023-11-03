@@ -1,5 +1,3 @@
-import os
-
 import pytest
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QTimer, QCoreApplication
@@ -7,15 +5,8 @@ from PyQt5.QtCore import QTimer, QCoreApplication
 from src.run_torpoker import AppHome
 from PyQt5 import QtCore
 from unittest.mock import patch
-from test_files.help_functions import find_button_with_object_name, find_button_with_text, find_IPPop_dialog, read_file_as_json
-from test_files.api_v1 import MOCKED_TABLE_STATE_RESPONSE, \
-    MOCKED_CONFIRM_RESPONSE, MOCKED_CALL_RESPONSE, MOCKED_TABLE_STATE_AFTER_CALL_RESPONSE, \
-    MOCKED_TABLE_STATE_AFTER_ENEMY_CHECK_RESPONSE, MOCKED_TABLE_STATE_AFTER_FLOP_RESPONSE, MOCKED_CHECK_RESPONSE, \
-    MOCKED_TABLE_STATE_AFTER_TURN_RESPONSE, MOCKED_TABLE_STATE_AFTER_OPPONENT_CHECK_TURN, \
-    MOCKED_TABLE_STATE_AFTER_RAISE, MOCKED_TABLE_STATE_AFTER_OPPONENT_CALL, \
-    MOCKED_TABLE_STATE_NEW_ROUND, MOCKED_ACCOUNT_RESPONSE_AFTER_LEAVE, MOCKED_QUIT_TABLE_RESPONSE, \
-    MOCKED_CASHOUT_RESPONSE, MOCKED_TABLE_STATUS_AFTER_MESSAGE, MOCKED_TABLES_RESPONSE, MOCKED_ACCOUNT_INFO_RESPONSE, \
-    MOCKED_SEND_COMPLETED_RESPONSE, MOCKED_SEND_POST_RESPONSE, MOCKED_JOIN_TABLE_RESPONSE, MOCKED_ACCOUNT_RESPONSE
+from test_files.help_functions import find_button_with_object_name, find_button_with_text, find_IPPop_dialog, load_mock_data
+
 
 
 
@@ -43,16 +34,28 @@ def test_click_logging(qtbot, app):
     qtbot.wait(1500)
     window.ui.lineEdit_address_port.setText("443")
 
-    MOCKED_ACCOUNT_RESPONSE= read_file_as_json("apiV1/mocked_account_response.txt")
-    MOCKED_ACCOUNT_INFO_RESPONSE = read_file_as_json("apiV1/mocked_account_info_response.txt")
-    MOCKED_TABLES_RESPONSE = read_file_as_json("apiV1/mocked_tables_response.txt")
+    MOCKED_CONFIRM_RESPONSE = load_mock_data('mocked_confirm_response.txt')
+    MOCKED_TABLE_STATE_RESPONSE = load_mock_data('mocked_table_state_response.txt')
+    MOCKED_CALL_RESPONSE = load_mock_data('mocked_call_response.txt')
+    MOCKED_TABLE_STATE_AFTER_CALL_RESPONSE = load_mock_data('mocked_table_state_after_call_response.txt')
+    MOCKED_CHECK_RESPONSE = load_mock_data('mocked_check_response.txt')
+    MOCKED_TABLE_STATE_AFTER_TURN_RESPONSE = load_mock_data('mocked_table_state_after_turn_response.txt')
+    MOCKED_TABLE_STATE_AFTER_RAISE = load_mock_data('mocked_table_state_after_raise.txt')
+    MOCKED_TABLE_STATE_NEW_ROUND = load_mock_data('mocked_table_state_new_round.txt')
+    MOCKED_CASHOUT_RESPONSE = load_mock_data('mocked_cashout_response.txt')
+    MOCKED_TABLE_STATUS_AFTER_MESSAGE = load_mock_data('mocked_table_status_after_message_response.txt')
+
+
+    MOCKED_ACCOUNT_RESPONSE = load_mock_data('mocked_account_response.txt')
+    MOCKED_TABLES_RESPONSE = load_mock_data('mocked_tables_response.txt')
+
 
 
     # Start the mocking for API calls
     with patch('src.connection.api.API.api_call', side_effect=[MOCKED_ACCOUNT_RESPONSE, MOCKED_TABLES_RESPONSE]):
         # Click on the connect button
         qtbot.mouseClick(window.ui.pushButton_connect, QtCore.Qt.LeftButton)  # Click on the button
-        qtbot.wait(150000)  # Wait a moment for the Captcha dialog to load
+        qtbot.wait(1500)  # Wait a moment for the Captcha dialog to load
 
     play_now_button = window.table_list.ui.pushButton_playnow
     qtbot.mouseClick(play_now_button, QtCore.Qt.LeftButton)
@@ -68,6 +71,9 @@ def test_click_logging(qtbot, app):
     qtbot.wait(1500)
     captcha_dialog.ui.lineEdit_captcha.setText("CAPTCHA_Text")
 
+    MOCKED_SEND_POST_RESPONSE = load_mock_data('mocked_send_post_response.txt')
+    MOCKED_SEND_COMPLETED_RESPONSE = load_mock_data('mocked_send_completed_response.txt')
+    MOCKED_ACCOUNT_INFO_RESPONSE = load_mock_data('mocked_account_info_response.txt')
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         # Mock responses for the POST request and subsequent GET requests
@@ -83,6 +89,8 @@ def test_click_logging(qtbot, app):
 
 
         qtbot.wait(16500)
+
+    MOCKED_JOIN_TABLE_RESPONSE = load_mock_data('mocked_join_table_response.txt')
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
@@ -115,6 +123,9 @@ def test_click_logging(qtbot, app):
     input_submit_button = input_popup.ui.pushButton_submit
     qtbot.mouseClick(input_submit_button, QtCore.Qt.LeftButton)
 
+    #MOCKED_CONFIRM_RESPONSE = load_mock_data('mocked_confirm_response.txt')
+    #MOCKED_TABLE_STATE_RESPONSE = load_mock_data('mocked_table_state_response.txt')
+
     # After clicking the "Join" button, we simulate the joining process
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
@@ -131,6 +142,9 @@ def test_click_logging(qtbot, app):
     call_button = find_button_with_object_name("pushButton_call")
     qtbot.mouseClick(call_button, QtCore.Qt.LeftButton)
 
+    #MOCKED_CALL_RESPONSE = load_mock_data('mocked_call_response.txt')
+    #MOCKED_TABLE_STATE_AFTER_CALL_RESPONSE = load_mock_data('mocked_table_state_after_call_response.txt')
+
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
@@ -141,7 +155,7 @@ def test_click_logging(qtbot, app):
 
         qtbot.wait(5000)
 
-
+    MOCKED_TABLE_STATE_AFTER_ENEMY_CHECK_RESPONSE = load_mock_data('mocked_table_state_after_enemy_check_response.txt')
 
     # after opponent check
     with patch('src.connection.api.API.api_call') as mocked_api_call:
@@ -153,6 +167,7 @@ def test_click_logging(qtbot, app):
 
 #----------------------------------Flop----------------------------------
 
+    MOCKED_TABLE_STATE_AFTER_FLOP_RESPONSE = load_mock_data('mocked_table_state_after_flop_response.txt')
     # Opponent check
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
@@ -165,6 +180,9 @@ def test_click_logging(qtbot, app):
     check_button = find_button_with_text("CHECK")
     qtbot.mouseClick(check_button, QtCore.Qt.LeftButton)
 
+    #MOCKED_CHECK_RESPONSE = load_mock_data('mocked_check_response.txt')
+    #MOCKED_TABLE_STATE_AFTER_TURN_RESPONSE = load_mock_data('mocked_table_state_after_turn_response.txt')
+
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
             MOCKED_CHECK_RESPONSE,
@@ -174,6 +192,8 @@ def test_click_logging(qtbot, app):
         qtbot.wait(1500)
 
     # ----------------------------------Turn----------------------------------
+    MOCKED_TABLE_STATE_AFTER_OPPONENT_CHECK_TURN = load_mock_data('mocked_table_state_after_opponent_check_turn_response.txt')
+
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.return_value = MOCKED_TABLE_STATE_AFTER_OPPONENT_CHECK_TURN
 
@@ -183,10 +203,13 @@ def test_click_logging(qtbot, app):
     raise_button = find_button_with_text("RAISE")
     qtbot.mouseClick(raise_button, QtCore.Qt.LeftButton)
 
+    #MOCKED_TABLE_STATE_AFTER_RAISE = load_mock_data('mocked_table_state_after_raise.txt')
+
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [MOCKED_CONFIRM_RESPONSE, MOCKED_TABLE_STATE_AFTER_RAISE]
         qtbot.wait(1500)
 
+    MOCKED_TABLE_STATE_AFTER_OPPONENT_CALL = load_mock_data('mocked_table_state_after_opponent_call.txt')
 
     #Opponent calls the Raise
     with patch('src.connection.api.API.api_call') as mocked_api_call:
@@ -198,6 +221,9 @@ def test_click_logging(qtbot, app):
     # find the fold button and click
     fold_button = find_button_with_text("FOLD")
     qtbot.mouseClick(fold_button, QtCore.Qt.LeftButton)
+
+    #MOCKED_TABLE_STATE_NEW_ROUND = load_mock_data('mocked_table_state_new_round.txt')
+
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [MOCKED_CONFIRM_RESPONSE,  MOCKED_TABLE_STATE_NEW_ROUND]
@@ -214,6 +240,8 @@ def test_click_logging(qtbot, app):
     # Simulate the Enter key to send the message
     qtbot.keyPress(chat_input, QtCore.Qt.Key_Return)
 
+    #MOCKED_TABLE_STATUS_AFTER_MESSAGE = load_mock_data('mocked_table_status_after_message_response.txt')
+
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [MOCKED_CONFIRM_RESPONSE, MOCKED_TABLE_STATUS_AFTER_MESSAGE]
 
@@ -224,6 +252,10 @@ def test_click_logging(qtbot, app):
     # Find and click the “pushButton_quit” button
     quit_button = find_button_with_object_name("pushButton_quit")
     qtbot.mouseClick(quit_button, QtCore.Qt.LeftButton)
+
+    MOCKED_QUIT_TABLE_RESPONSE = load_mock_data('mocked_quit_table_response.txt')
+    MOCKED_ACCOUNT_RESPONSE_AFTER_LEAVE = load_mock_data('mocked_account_after_leave_response.txt')
+
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [MOCKED_QUIT_TABLE_RESPONSE,
