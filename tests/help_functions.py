@@ -29,7 +29,7 @@ def find_IPPop_dialog():
 
 
 
-folder_path = 'test_files/apiV1/'
+folder_path = 'tests/apiV1/'
 #function to load the mocks
 def load_mock_data(filename):
     with open(os.path.join(folder_path, filename), 'r') as file:
