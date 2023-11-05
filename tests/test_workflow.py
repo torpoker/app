@@ -5,7 +5,8 @@ from PyQt5.QtCore import QTimer, QCoreApplication
 from src.run_torpoker import AppHome
 from PyQt5 import QtCore
 from unittest.mock import patch
-from tests.help_functions import find_button_with_object_name, find_button_with_text, find_IPPop_dialog, load_mock_data
+from qapplication_helpers import QApplicationHelper
+from json_helpers import parse_json_file
 
 
 
@@ -19,6 +20,7 @@ def app():
     return QApplication([])
 
 def test_click_logging(qtbot, app):
+    folder_path = 'tests/apiV1/'
     # Create an instance of your application window
     window = AppHome()
     window.show()
@@ -34,20 +36,20 @@ def test_click_logging(qtbot, app):
     qtbot.wait(1500)
     window.ui.lineEdit_address_port.setText("443")
 
-    MOCKED_CONFIRM_RESPONSE = load_mock_data('mocked_confirm_response.txt')
-    MOCKED_TABLE_STATE_RESPONSE = load_mock_data('mocked_table_state_response.txt')
-    MOCKED_CALL_RESPONSE = load_mock_data('mocked_call_response.txt')
-    MOCKED_TABLE_STATE_AFTER_CALL_RESPONSE = load_mock_data('mocked_table_state_after_call_response.txt')
-    MOCKED_CHECK_RESPONSE = load_mock_data('mocked_check_response.txt')
-    MOCKED_TABLE_STATE_AFTER_TURN_RESPONSE = load_mock_data('mocked_table_state_after_turn_response.txt')
-    MOCKED_TABLE_STATE_AFTER_RAISE = load_mock_data('mocked_table_state_after_raise.txt')
-    MOCKED_TABLE_STATE_NEW_ROUND = load_mock_data('mocked_table_state_new_round.txt')
-    MOCKED_CASHOUT_RESPONSE = load_mock_data('mocked_cashout_response.txt')
-    MOCKED_TABLE_STATUS_AFTER_MESSAGE = load_mock_data('mocked_table_status_after_message_response.txt')
+    MOCKED_CONFIRM_RESPONSE = parse_json_file(folder_path,'mocked_confirm_response.json')
+    MOCKED_TABLE_STATE_RESPONSE = parse_json_file(folder_path,'mocked_table_state_response.json')
+    MOCKED_CALL_RESPONSE = parse_json_file(folder_path,'mocked_call_response.json')
+    MOCKED_TABLE_STATE_AFTER_CALL_RESPONSE = parse_json_file(folder_path,'mocked_table_state_after_call_response.json')
+    MOCKED_CHECK_RESPONSE = parse_json_file(folder_path,'mocked_check_response.json')
+    MOCKED_TABLE_STATE_AFTER_TURN_RESPONSE = parse_json_file(folder_path,'mocked_table_state_after_turn_response.json')
+    MOCKED_TABLE_STATE_AFTER_RAISE = parse_json_file(folder_path,'mocked_table_state_after_raise.json')
+    MOCKED_TABLE_STATE_NEW_ROUND = parse_json_file(folder_path,'mocked_table_state_new_round.json')
+    MOCKED_CASHOUT_RESPONSE = parse_json_file(folder_path,'mocked_cashout_response.json')
+    MOCKED_TABLE_STATUS_AFTER_MESSAGE = parse_json_file(folder_path,'mocked_table_status_after_message_response.json')
 
 
-    MOCKED_ACCOUNT_RESPONSE = load_mock_data('mocked_account_response.txt')
-    MOCKED_TABLES_RESPONSE = load_mock_data('mocked_tables_response.txt')
+    MOCKED_ACCOUNT_RESPONSE = parse_json_file(folder_path,'mocked_account_response.json')
+    MOCKED_TABLES_RESPONSE = parse_json_file(folder_path,'mocked_tables_response.json')
 
 
 
@@ -71,9 +73,9 @@ def test_click_logging(qtbot, app):
     qtbot.wait(1500)
     captcha_dialog.ui.lineEdit_captcha.setText("CAPTCHA_Text")
 
-    MOCKED_SEND_POST_RESPONSE = load_mock_data('mocked_send_post_response.txt')
-    MOCKED_SEND_COMPLETED_RESPONSE = load_mock_data('mocked_send_completed_response.txt')
-    MOCKED_ACCOUNT_INFO_RESPONSE = load_mock_data('mocked_account_info_response.txt')
+    MOCKED_SEND_POST_RESPONSE = parse_json_file(folder_path,'mocked_send_post_response.json')
+    MOCKED_SEND_COMPLETED_RESPONSE = parse_json_file(folder_path,'mocked_send_completed_response.json')
+    MOCKED_ACCOUNT_INFO_RESPONSE = parse_json_file(folder_path,'mocked_account_info_response.json')
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         # Mock responses for the POST request and subsequent GET requests
@@ -90,7 +92,7 @@ def test_click_logging(qtbot, app):
 
         qtbot.wait(16500)
 
-    MOCKED_JOIN_TABLE_RESPONSE = load_mock_data('mocked_join_table_response.txt')
+    MOCKED_JOIN_TABLE_RESPONSE = parse_json_file(folder_path,'mocked_join_table_response.json')
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
@@ -111,7 +113,7 @@ def test_click_logging(qtbot, app):
         qtbot.wait(1500)
 
     # This function searches for the opened dialog of type IPPop
-    input_popup = find_IPPop_dialog()
+    input_popup = QApplicationHelper.find_IPPop_dialog()
 
     # Set the value in the input widget
     input_value_widget = input_popup.ui.lineEdit_btc_amt
@@ -138,7 +140,7 @@ def test_click_logging(qtbot, app):
     # -------------------------Table--------------------------------
 
     # find the callbutton and click
-    call_button = find_button_with_object_name("pushButton_call")
+    call_button = QApplicationHelper.find_button_with_object_name("pushButton_call")
     qtbot.mouseClick(call_button, QtCore.Qt.LeftButton)
 
 
@@ -153,7 +155,7 @@ def test_click_logging(qtbot, app):
 
         qtbot.wait(5000)
 
-    MOCKED_TABLE_STATE_AFTER_ENEMY_CHECK_RESPONSE = load_mock_data('mocked_table_state_after_enemy_check_response.txt')
+    MOCKED_TABLE_STATE_AFTER_ENEMY_CHECK_RESPONSE = parse_json_file(folder_path,'mocked_table_state_after_enemy_check_response.json')
 
     # after opponent check
     with patch('src.connection.api.API.api_call') as mocked_api_call:
@@ -165,7 +167,7 @@ def test_click_logging(qtbot, app):
 
 #----------------------------------Flop----------------------------------
 
-    MOCKED_TABLE_STATE_AFTER_FLOP_RESPONSE = load_mock_data('mocked_table_state_after_flop_response.txt')
+    MOCKED_TABLE_STATE_AFTER_FLOP_RESPONSE = parse_json_file(folder_path,'mocked_table_state_after_flop_response.json')
     # Opponent check
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.side_effect = [
@@ -175,7 +177,7 @@ def test_click_logging(qtbot, app):
         qtbot.wait(5000)
 
     # find the callbutton and click
-    check_button = find_button_with_text("CHECK")
+    check_button = QApplicationHelper.find_button_with_text("CHECK")
     qtbot.mouseClick(check_button, QtCore.Qt.LeftButton)
 
 
@@ -189,7 +191,7 @@ def test_click_logging(qtbot, app):
         qtbot.wait(1500)
 
     # ----------------------------------Turn----------------------------------
-    MOCKED_TABLE_STATE_AFTER_OPPONENT_CHECK_TURN = load_mock_data('mocked_table_state_after_opponent_check_turn_response.txt')
+    MOCKED_TABLE_STATE_AFTER_OPPONENT_CHECK_TURN = parse_json_file(folder_path,'mocked_table_state_after_opponent_check_turn_response.json')
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
         mocked_api_call.return_value = MOCKED_TABLE_STATE_AFTER_OPPONENT_CHECK_TURN
@@ -197,7 +199,7 @@ def test_click_logging(qtbot, app):
     qtbot.wait(5000)
 
     # find the raise button and click it
-    raise_button = find_button_with_text("RAISE")
+    raise_button = QApplicationHelper.find_button_with_text("RAISE")
     qtbot.mouseClick(raise_button, QtCore.Qt.LeftButton)
 
 
@@ -206,7 +208,7 @@ def test_click_logging(qtbot, app):
         mocked_api_call.side_effect = [MOCKED_CONFIRM_RESPONSE, MOCKED_TABLE_STATE_AFTER_RAISE]
         qtbot.wait(1500)
 
-    MOCKED_TABLE_STATE_AFTER_OPPONENT_CALL = load_mock_data('mocked_table_state_after_opponent_call.txt')
+    MOCKED_TABLE_STATE_AFTER_OPPONENT_CALL = parse_json_file(folder_path,'mocked_table_state_after_opponent_call.json')
 
     #Opponent calls the Raise
     with patch('src.connection.api.API.api_call') as mocked_api_call:
@@ -216,7 +218,7 @@ def test_click_logging(qtbot, app):
 
 
     # find the fold button and click
-    fold_button = find_button_with_text("FOLD")
+    fold_button = QApplicationHelper.find_button_with_text("FOLD")
     qtbot.mouseClick(fold_button, QtCore.Qt.LeftButton)
 
 
@@ -229,7 +231,7 @@ def test_click_logging(qtbot, app):
 
 
     # Find the "lineEdit_chat" widget and enter the message "in out".
-    chat_input = find_button_with_object_name("lineEdit_chat")
+    chat_input = QApplicationHelper.find_button_with_object_name("lineEdit_chat")
     qtbot.keyClicks(chat_input, "im out")
 
     qtbot.wait(1500)
@@ -247,11 +249,11 @@ def test_click_logging(qtbot, app):
         # -----------------------------------
 
     # Find and click the “pushButton_quit” button
-    quit_button = find_button_with_object_name("pushButton_quit")
+    quit_button = QApplicationHelper.find_button_with_object_name("pushButton_quit")
     qtbot.mouseClick(quit_button, QtCore.Qt.LeftButton)
 
-    MOCKED_QUIT_TABLE_RESPONSE = load_mock_data('mocked_quit_table_response.txt')
-    MOCKED_ACCOUNT_RESPONSE_AFTER_LEAVE = load_mock_data('mocked_account_after_leave_response.txt')
+    MOCKED_QUIT_TABLE_RESPONSE = parse_json_file(folder_path,'mocked_quit_table_response.json')
+    MOCKED_ACCOUNT_RESPONSE_AFTER_LEAVE = parse_json_file(folder_path,'mocked_account_after_leave_response.json')
 
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
@@ -263,7 +265,7 @@ def test_click_logging(qtbot, app):
 
 
     # Find and click the “pushButton_cashout” button
-    cashout_button = find_button_with_object_name("pushButton_cashout")
+    cashout_button = QApplicationHelper.find_button_with_object_name("pushButton_cashout")
     qtbot.mouseClick(cashout_button, QtCore.Qt.LeftButton)
 
     with patch('src.connection.api.API.api_call') as mocked_api_call:
@@ -272,7 +274,8 @@ def test_click_logging(qtbot, app):
         qtbot.wait(10000)
 
 
-
     app.exit()
+
+
 
 
