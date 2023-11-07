@@ -9,12 +9,6 @@ from qapplication_helpers import QApplicationHelper
 from json_helpers import parse_json_file
 
 
-
-
-
-
-
-
 @pytest.fixture(scope="session", autouse=True)
 def app():
     return QApplication([])
@@ -51,14 +45,39 @@ def test_click_logging(qtbot, app):
     MOCKED_ACCOUNT_RESPONSE = parse_json_file(folder_path,'mocked_account_response.json')
     MOCKED_TABLES_RESPONSE = parse_json_file(folder_path,'mocked_tables_response.json')
 
+    # Gemockte Antwort-Dateien parsen (wie bereits vorhanden)
+    MOCKED_ACCOUNT_RESPONSE = parse_json_file(folder_path, 'mocked_account_response.json')
+    MOCKED_TABLES_RESPONSE = parse_json_file(folder_path, 'mocked_tables_response.json')
+
+    MOCKED_SEND_POST_RESPONSE = parse_json_file(folder_path,'mocked_send_post_response.json')
+    MOCKED_SEND_COMPLETED_RESPONSE = parse_json_file(folder_path,'mocked_send_completed_response.json')
+    MOCKED_ACCOUNT_INFO_RESPONSE = parse_json_file(folder_path,'mocked_account_info_response.json')
+
+    def side_effect_connect(*args, **kwargs):
+        mock_responses = {
+            'GET /json/account': MOCKED_ACCOUNT_RESPONSE,
+            'GET /json/tables': MOCKED_TABLES_RESPONSE,
+        }
+        request = args[0]
+        return mock_responses.get(request, None)
+
+    def side_effect_deposit(*args, **kwargs):
+        mock_responses = {
+            'POST /json/send': MOCKED_SEND_POST_RESPONSE,
+            'GET /json/send': MOCKED_SEND_COMPLETED_RESPONSE,
+            'GET /json/account': MOCKED_ACCOUNT_INFO_RESPONSE,
+        }
+        request = args[0]
+        return mock_responses.get(request, None)
+
+    with patch('src.connection.api.API.api_call', side_effect=side_effect_connect)as mock_api_call:
+        qtbot.mouseClick(window.ui.pushButton_connect, QtCore.Qt.LeftButton)
 
 
-    # Start the mocking for API calls
-    with patch('src.connection.api.API.api_call', side_effect=[MOCKED_ACCOUNT_RESPONSE, MOCKED_TABLES_RESPONSE]):
-        # Click on the connect button
-        qtbot.mouseClick(window.ui.pushButton_connect, QtCore.Qt.LeftButton)  # Click on the button
-        qtbot.wait(1500)  # Wait a moment for the Captcha dialog to load
 
+
+
+    qtbot.wait(1500)
     play_now_button = window.table_list.ui.pushButton_playnow
     qtbot.mouseClick(play_now_button, QtCore.Qt.LeftButton)
     qtbot.wait(1500)  # Wait a moment for the Captcha dialog to load
@@ -72,25 +91,16 @@ def test_click_logging(qtbot, app):
     captcha_dialog.ui.lineEdit_btc_address.setText("ADRESS")
     qtbot.wait(1500)
     captcha_dialog.ui.lineEdit_captcha.setText("CAPTCHA_Text")
+    qtbot.wait(1500)
 
-    MOCKED_SEND_POST_RESPONSE = parse_json_file(folder_path,'mocked_send_post_response.json')
-    MOCKED_SEND_COMPLETED_RESPONSE = parse_json_file(folder_path,'mocked_send_completed_response.json')
-    MOCKED_ACCOUNT_INFO_RESPONSE = parse_json_file(folder_path,'mocked_account_info_response.json')
 
-    with patch('src.connection.api.API.api_call') as mocked_api_call:
-        # Mock responses for the POST request and subsequent GET requests
-        mocked_api_call.side_effect = [
-            MOCKED_SEND_POST_RESPONSE,
-            MOCKED_SEND_COMPLETED_RESPONSE,
-            MOCKED_ACCOUNT_INFO_RESPONSE
-        ]
-
-        # click the "Submit"-Button in the Captcha-Dialog
-        qtbot.wait(1500)
+    with patch('src.connection.api.API.api_call', side_effect=side_effect_deposit)as mock_api_call:
         qtbot.mouseClick(captcha_dialog.ui.pushButton_submit, QtCore.Qt.LeftButton)
 
 
         qtbot.wait(16500)
+
+
 
     MOCKED_JOIN_TABLE_RESPONSE = parse_json_file(folder_path,'mocked_join_table_response.json')
 
