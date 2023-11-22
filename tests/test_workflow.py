@@ -1,3 +1,4 @@
+import time
 import pytest
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QTimer, QCoreApplication
@@ -73,7 +74,7 @@ def mock_api_calls(mocker):
     )
     table_state_response_mock = mocker.patch(
         'src.connection.api.API.get_table_by_id',
-        side_effect=[mocked_table_state_response, mocked_table_state_after_call_response, mocked_table_state_after_turn_response, mocked_table_state_after_call, mocked_table_state_after_fold, mocked_table_state_after_message]
+        side_effect=[mocked_table_state_response, mocked_table_state_after_call_response, mocked_table_state_after_turn_response, mocked_table_state_after_call, mocked_table_state_after_fold, mocked_table_state_after_message ]
     )
 
     post_table_call_mock = mocker.patch(
@@ -92,12 +93,12 @@ def mock_api_calls(mocker):
 
     post_table_fold_mock = mocker.patch(
         'src.connection.api.API.post_table_fold',
-        return_value=mocked_table_state_after_fold
+        return_value=mocked_raise_response
     )
 
     post_table_message_mock = mocker.patch(
         'src.connection.api.API.post_message_to_table',  # Stelle sicher, dass dies der korrekte Methodenname ist
-        return_value=mocked_table_state_after_message
+        return_value=mocked_raise_response
     )
 
     quit_table_mock = mocker.patch(
@@ -127,10 +128,11 @@ def mock_api_calls(mocker):
         'post_table_fold': post_table_fold_mock,
         'post_table_message': post_table_message_mock,
         'quit_table': quit_table_mock,
+        'cashout': cashout_mock,
     }
 
 def test_click_logging(qtbot, mock_api_calls):
-    """Test the logging functionality triggered by the GUI's connect button."""
+
     window = AppHome()
     window.show()
 
@@ -152,7 +154,7 @@ def test_click_logging(qtbot, mock_api_calls):
     assert mock_api_calls['get_json_account'].call_count == 1, "get_json_account should be called once"
     assert mock_api_calls['get_json_tables'].call_count == 1, "get_json_tables should be called once"
 
-
+    # find the play button and click
     play_now_button = window.table_list.ui.pushButton_playnow
     qtbot.mouseClick(play_now_button, QtCore.Qt.LeftButton)
     qtbot.wait(1500)
@@ -166,31 +168,29 @@ def test_click_logging(qtbot, mock_api_calls):
     captcha_dialog.ui.lineEdit_captcha.setText("CAPTCHA_Text")
     qtbot.wait(1500)
 
-    # Get Account/ MOCKED_ACCOUNT_INFO_RESPONSE
-    # post_json_send / MOCKED_SEND_POST_RESPONSE
     qtbot.mouseClick(captcha_dialog.ui.pushButton_submit, QtCore.Qt.LeftButton)
     qtbot.wait(1500)
-    assert mock_api_calls['post_json_send'].call_count == 1, "post_json_send should be called once"
+
+    assert mock_api_calls['post_json_send'].call_count == 1
 
     qtbot.wait(16500)
 
-    assert mock_api_calls['get_json_send'].call_count == 1, "get_json_send should be called to check send status"
-    assert mock_api_calls['get_json_account'].call_count == 2, "get_json_account should be called again after captcha submit"
+    assert mock_api_calls['get_json_send'].call_count == 1
+    assert mock_api_calls['get_json_account'].call_count == 2
 
-    # Greife auf das QTableWidget-Objekt zu
+    # access the QTableWidget-Object
     table_widget = window.table_list.ui.tableWidget_game_tables
 
-    # Wähle einen spezifischen Tisch aus (z.B. den ersten Tisch)
+    # choose a specific table in this case the first one
     first_table_row = 0
-    join_button_column = 3  # Der "Join"-Button befindet sich in der vierten Spalte (Index 3).
+    join_button_column = 3  # the "Join"-Button is in the 4. column (Index 3).
 
-    # Greife auf den "Join"-Button des ausgewählten Tisches zu und klicke darauf
+    # Access the "Join"-Button from the choosen table
     join_button = table_widget.cellWidget(first_table_row, join_button_column)
     qtbot.mouseClick(join_button, QtCore.Qt.LeftButton)
     qtbot.wait(500)
 
 
-    # Überprüfe, ob der API-Aufruf für das Beitreten zum Tisch gemacht wurde
     assert mock_api_calls['post_json_table_join'].call_count == 1
 
     # This function searches for the opened dialog of type IPPop
@@ -202,70 +202,70 @@ def test_click_logging(qtbot, mock_api_calls):
     qtbot.wait(500)
     input_submit_button = input_popup.ui.pushButton_submit
 
-
+    # click the submit button
     qtbot.mouseClick(input_submit_button, QtCore.Qt.LeftButton)
     qtbot.wait(500)
 
     assert mock_api_calls['post_table_join_confirm'].call_count == 1
     assert mock_api_calls['get_table_state'].call_count == 1
+    time.sleep(1)
 
-    qtbot.wait(5000)
 
-    # Finde den Call-Button und klicke darauf
+    # find and click the call Button
     call_button = QApplicationHelper.find_button_with_object_name("pushButton_call")
     qtbot.mouseClick(call_button, QtCore.Qt.LeftButton)
-    qtbot.wait(5000)
-
+    qtbot.wait(1000)
 
     assert mock_api_calls['post_table_call'].call_count == 1
-    assert mock_api_calls['get_table_state'].call_count > 0
+    assert mock_api_calls['get_table_state'].call_count == 2
+    time.sleep(1)
+
 
     # find the checkbutton and click
     check_button = QApplicationHelper.find_button_with_text("CHECK")
     qtbot.mouseClick(check_button, QtCore.Qt.LeftButton)
 
-    qtbot.wait(5000)
+    qtbot.wait(1000)
     assert mock_api_calls['post_table_check'].call_count == 1
-    assert mock_api_calls['get_table_state'].call_count == 4
+    assert mock_api_calls['get_table_state'].call_count == 3
+    time.sleep(1)
 
     # find the raise button and click it
     raise_button = QApplicationHelper.find_button_with_text("RAISE")
     qtbot.mouseClick(raise_button, QtCore.Qt.LeftButton)
-    qtbot.wait(5000)
+    qtbot.wait(1000)
 
     assert mock_api_calls['post_table_raise'].call_count == 1
-    assert mock_api_calls['get_table_state'].call_count == 5
+    assert mock_api_calls['get_table_state'].call_count == 4
+    time.sleep(1)
 
-    qtbot.wait(5500)
-
-    raise_button = QApplicationHelper.find_button_with_text("FOLD")
-    qtbot.mouseClick(raise_button, QtCore.Qt.LeftButton)
-    qtbot.wait(4500)
+    fold_button = QApplicationHelper.find_button_with_text("FOLD")
+    qtbot.mouseClick(fold_button, QtCore.Qt.LeftButton)
+    qtbot.wait(1000)
 
     assert mock_api_calls['post_table_fold'].call_count == 1
-    assert mock_api_calls['get_table_state'].call_count == 6
+    assert mock_api_calls['get_table_state'].call_count == 5
+
 
 
     # Find the "lineEdit_chat" widget and enter the message "in out".
     chat_input = QApplicationHelper.find_button_with_object_name("lineEdit_chat")
     qtbot.keyClicks(chat_input, "im out")
-    qtbot.wait(1500)
-
+    time.sleep(1)
     # Simulate the Enter key to send the message
     qtbot.keyPress(chat_input, QtCore.Qt.Key_Return)
+    qtbot.wait(1000)
 
-    #assert mock_api_calls['post_table_message'].call_count == 1
-    #assert mock_api_calls['get_table_state'].call_count == 7
-    qtbot.wait(5000)
 
-    # Finde den Quit-Button und klicke darauf
+    assert mock_api_calls['post_table_message'].call_count == 1
+    assert mock_api_calls['get_table_state'].call_count == 6
+
+
+    # Find the quit_button and click
     quit_button = QApplicationHelper.find_button_with_object_name("pushButton_quit")
     qtbot.mouseClick(quit_button, QtCore.Qt.LeftButton)
-
-    # Warte kurz, um sicherzustellen, dass die Aktion verarbeitet wird
     qtbot.wait(1500)
 
-    # Überprüfe, ob die korrekten API-Aufrufe gemacht wurden
     assert mock_api_calls['quit_table'].call_count == 1
     assert mock_api_calls['get_json_account'].call_count == 3
 
@@ -273,10 +273,10 @@ def test_click_logging(qtbot, mock_api_calls):
     # Find and click the “pushButton_cashout” button
     cashout_button = QApplicationHelper.find_button_with_object_name("pushButton_cashout")
     qtbot.mouseClick(cashout_button, QtCore.Qt.LeftButton)
-    qtbot.wait(1500)
+    qtbot.wait(100)
+
     assert mock_api_calls['cashout'].call_count == 1
 
-
-    qtbot.wait(5000)
+    qtbot.wait(2000)
 
 
