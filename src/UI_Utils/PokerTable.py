@@ -18,10 +18,10 @@ try:
 except ImportError:
     sys.exit("PyQt5 has not been found. Setup process can be found on README")
 
-from src.UI import table_window
-from src.UI_Utils import chat_widget
+from ..UI import table_window
+from ..UI_Utils import chat_widget
 from . import RequestThread
-from src.connection import api
+from ..connection import api
 
 CARDS = {}
 

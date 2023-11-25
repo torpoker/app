@@ -145,6 +145,8 @@ def test_click_logging(qtbot, mock_api_calls):
     qtbot.wait(500)
     window.ui.lineEdit_address_port.setText("443")
 
+    # Connect button
+    assert window.ui.pushButton_connect is not None, "Connect button not found"
     qtbot.mouseClick(window.ui.pushButton_connect, QtCore.Qt.LeftButton)
 
     # Ensure there's enough time for the application to process events
@@ -156,11 +158,13 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # find the play button and click
     play_now_button = window.table_list.ui.pushButton_playnow
+    assert play_now_button is not None, "Play now button not found"
     qtbot.mouseClick(play_now_button, QtCore.Qt.LeftButton)
     qtbot.wait(1500)
 
     # Access the Captcha dialog
     captcha_dialog = window.table_list.captcha_dialog
+    assert captcha_dialog.ui.pushButton_submit is not None, "Captcha dialog submit button not found"
 
     # Set the text in the input fields of the Captcha dialog
     captcha_dialog.ui.lineEdit_btc_address.setText("ADRESS")
@@ -187,6 +191,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # Access the "Join"-Button from the choosen table
     join_button = table_widget.cellWidget(first_table_row, join_button_column)
+    assert join_button is not None, "Join button not found"
     qtbot.mouseClick(join_button, QtCore.Qt.LeftButton)
     qtbot.wait(500)
 
@@ -195,6 +200,8 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # This function searches for the opened dialog of type IPPop
     input_popup = QApplicationHelper.find_IPPop_dialog()
+    assert input_popup is not None, "input_popup not found"
+
 
     # Set the value in the input widget
     input_value_widget = input_popup.ui.lineEdit_btc_amt
@@ -204,6 +211,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # click the submit button
     qtbot.mouseClick(input_submit_button, QtCore.Qt.LeftButton)
+    assert input_submit_button is not None, "Input popup submit button not found"
     qtbot.wait(500)
 
     assert mock_api_calls['post_table_join_confirm'].call_count == 1
@@ -213,6 +221,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # find and click the call Button
     call_button = QApplicationHelper.find_button_with_object_name("pushButton_call")
+    assert call_button is not None, "Call button not found"
     qtbot.mouseClick(call_button, QtCore.Qt.LeftButton)
     qtbot.wait(1000)
 
@@ -223,6 +232,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # find the checkbutton and click
     check_button = QApplicationHelper.find_button_with_text("CHECK")
+    assert check_button is not None, "Check button not found"
     qtbot.mouseClick(check_button, QtCore.Qt.LeftButton)
 
     qtbot.wait(1000)
@@ -232,6 +242,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # find the raise button and click it
     raise_button = QApplicationHelper.find_button_with_text("RAISE")
+    assert raise_button is not None, "Raise button not found"
     qtbot.mouseClick(raise_button, QtCore.Qt.LeftButton)
     qtbot.wait(1000)
 
@@ -240,6 +251,7 @@ def test_click_logging(qtbot, mock_api_calls):
     time.sleep(1)
 
     fold_button = QApplicationHelper.find_button_with_text("FOLD")
+    assert fold_button is not None, "Fold button not found"
     qtbot.mouseClick(fold_button, QtCore.Qt.LeftButton)
     qtbot.wait(1000)
 
@@ -263,6 +275,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # Find the quit_button and click
     quit_button = QApplicationHelper.find_button_with_object_name("pushButton_quit")
+    assert quit_button is not None, "Quit button not found"
     qtbot.mouseClick(quit_button, QtCore.Qt.LeftButton)
     qtbot.wait(1500)
 
@@ -272,6 +285,7 @@ def test_click_logging(qtbot, mock_api_calls):
 
     # Find and click the “pushButton_cashout” button
     cashout_button = QApplicationHelper.find_button_with_object_name("pushButton_cashout")
+    assert cashout_button is not None, "Cashout button not found"
     qtbot.mouseClick(cashout_button, QtCore.Qt.LeftButton)
     qtbot.wait(100)
 

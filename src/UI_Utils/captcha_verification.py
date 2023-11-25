@@ -1,5 +1,5 @@
 from .JoinList import *
-from src.UI import captcha_dialog
+from ..UI import captcha_dialog
 from PyQt5.QtGui import QPixmap
 
 

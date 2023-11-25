@@ -1,8 +1,8 @@
 from .JoinList import *
-from src.connection import api
+from ..connection import api
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMessageBox
-from src.UI import btc_deposit_window
+from ..UI import btc_deposit_window
 
 
 class BtcDeposit(QDialog):

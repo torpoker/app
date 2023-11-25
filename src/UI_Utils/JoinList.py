@@ -8,13 +8,14 @@ from PyQt5.QtWidgets import (QMainWindow, QTableWidgetItem, QDialog, QLabel, QPu
                              QPlainTextEdit,
                              QVBoxLayout)
 
-from src.UI import tables_list, popup
-from src.UI_Utils import table_handling
-from src.UI_Utils import RequestThread, PokerTable
-from src.UI_Utils.alert import show_message, show_error_message, show_request_status
-from src.UI_Utils.captcha_verification import CaptchaDialog
-from src.UI_Utils.deposit_verification import BtcDeposit
-from src.connection import api
+
+from ..UI import tables_list, popup
+from . import table_handling
+from . import RequestThread, PokerTable
+from .alert import show_message, show_error_message, show_request_status
+from .captcha_verification import CaptchaDialog
+from .deposit_verification import BtcDeposit
+from ..connection import api
 
 ERROR_MSG = "<h3>Error</h3>"
 ERROR_POPUP_TITLE = "ERROR"
