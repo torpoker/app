@@ -20,27 +20,53 @@ def app():
 def mock_api_calls(mocker):
     folder_path = 'tests/apiV1/'
 
+    #API: Sending request with params: ('GET /json/tables', None, None)
     mocked_tables_response = parse_json_file(folder_path, 'mocked_tables_response.json')
+
+    #API: Sending request with params: ('GET /json/account', None, None)
     mocked_account_response = parse_json_file(folder_path, 'mocked_account_response.json')
+
+    #API: Sending request with params: ('GET /json/account', None, None)
     mocked_account_info_response = parse_json_file(folder_path, 'mocked_account_info_response.json')
+
+    #API: Sending request with params: ('POST /json/send', b'address=ADRESS&captcha=CAPTCHA_Text', None)
     mocked_send_post_response = parse_json_file(folder_path, 'mocked_send_post_response.json')
+
+    #API: Sending request with params: ('GET /json/send', None, None)
     mocked_send_completed_response = parse_json_file(folder_path, 'mocked_send_completed_response.json')
+
+    #API: Sending request with params: ('POST /json/table/{table_id}/join', None, {'table_id': 27})
     mocked_join_table_response = parse_json_file(folder_path, 'mocked_join_table_response.json')
+
+    #API: Sending request with params: ('POST /json/table/{table_id}/join/confirm', b'amount=30', {'table_id': 27})
     mocked_confirm_response = parse_json_file(folder_path, 'mocked_confirm_response.json')
+
+    #API: Sending request with params: ('GET /json/table/{table_id}', None, {'table_id': 27})
     mocked_table_state_response = parse_json_file(folder_path, 'mocked_table_state_response.json')
+
+    #API: Sending request with params: ('POST /json/table/{table_id}/call', None, {'table_id': 27})
     mocked_call_response = parse_json_file(folder_path, 'mocked_call_response.json')
+
+    #API: Sending request with params: ('POST /json/table/{table_id}/check', None, {'table_id': 27})
     mocked_check_response = parse_json_file(folder_path, 'mocked_check_response.json')
+
+    #API: Sending request with params: ('POST /json/table/{table_id}/raise', b'amount=2', {'table_id': 27})
     mocked_raise_response = parse_json_file(folder_path, 'mocked_check_response.json')
 
+    #API: Sending request with params: ('GET /json/table/{table_id}/quit', None, {'table_id': 27})
     mocked_quit_table = parse_json_file(folder_path, 'mocked_quit_table_response.json')
+
+    #API: Sending request with params: ('GET /json/account', None, None)
     mocked_after_leave = parse_json_file(folder_path, 'mocked_account_after_leave_response.json')
 
+    #API: Sending request with params: ('GET /json/table/{table_id}', None, {'table_id': 27})
     mocked_table_state_after_call_response = parse_json_file(folder_path, 'mocked_table_state_after_flop_response.json')
     mocked_table_state_after_turn_response = parse_json_file(folder_path,'mocked_table_state_after_opponent_check_turn_response.json')
     mocked_table_state_after_call = parse_json_file(folder_path,'mocked_table_state_after_opponent_call.json')
     mocked_table_state_after_fold = parse_json_file(folder_path,'mocked_table_state_new_round.json')
     mocked_table_state_after_message = parse_json_file(folder_path, 'mocked_table_status_after_message_response.json')
 
+    #API: Sending request with params: ('GET /json/cashout', None, None)
     mocked_cashout_response = parse_json_file(folder_path, 'mocked_cashout_response.json')
 
 
@@ -97,7 +123,7 @@ def mock_api_calls(mocker):
     )
 
     post_table_message_mock = mocker.patch(
-        'src.connection.api.API.post_message_to_table',  # Stelle sicher, dass dies der korrekte Methodenname ist
+        'src.connection.api.API.post_message_to_table',
         return_value=mocked_raise_response
     )
 
@@ -107,7 +133,7 @@ def mock_api_calls(mocker):
     )
 
     cashout_mock = mocker.patch(
-        'src.connection.api.API.get_json_cashout',  # Ersetze 'cashout' durch den tatsächlichen Methodennamen
+        'src.connection.api.API.get_json_cashout',
         return_value=mocked_cashout_response
     )
 
