@@ -1,0 +1,20 @@
+{
+    "data": {
+        "table": 27,
+        "players": {
+            "1": {
+                "name": "anonymous",
+                "stack": 30,
+                "position": 1
+            }
+        },
+        "mystack": 30
+    },
+    "messages": [
+        {
+            "name": "anonymous",
+            "message": "im out",
+            "timer": 1698787398
+        }
+    ]
+}

@@ -1,8 +1,7 @@
 from typing import Dict
-
 from PyQt5 import QtCore
+from ..connection import api
 
-from connection import api
 
 
 class RequestThread(QtCore.QObject):

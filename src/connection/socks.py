@@ -55,7 +55,11 @@ Modifications made by Anorov (https://github.com/Anorov)
 """
 
 from base64 import b64encode
-from collections import Callable
+
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections import Callable
 from errno import EOPNOTSUPP, EINVAL, EAGAIN
 import functools
 from io import BytesIO
@@ -66,8 +70,7 @@ import socket
 import struct
 import sys
 
-__version__ = "1.6.7"
-
+__version__ = "1.7.1"
 
 if os.name == "nt" and sys.version_info < (3, 0):
     try:
@@ -89,7 +92,6 @@ _orgsocket = _orig_socket = socket.socket
 
 
 def set_self_blocking(function):
-
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
         self = args[0]
@@ -104,17 +106,19 @@ def set_self_blocking(function):
             # set orgin blocking
             if _is_blocking == 0:
                 self.setblocking(False)
+
     return wrapper
 
 
 class ProxyError(IOError):
     """Socket_err contains original socket.error exception."""
+
     def __init__(self, msg, socket_err=None):
         self.msg = msg
         self.socket_err = socket_err
 
         if socket_err:
-            self.msg += ": {0}".format(socket_err)
+            self.msg += ": {}".format(socket_err)
 
     def __str__(self):
         return self.msg
@@ -142,6 +146,7 @@ class SOCKS4Error(ProxyError):
 
 class HTTPError(ProxyError):
     pass
+
 
 SOCKS4_ERRORS = {
     0x5B: "Request rejected or failed",
@@ -186,6 +191,7 @@ def get_default_proxy():
     """Returns the default proxy, set by set_default_proxy."""
     return socksocket.default_proxy
 
+
 getdefaultproxy = get_default_proxy
 
 
@@ -199,6 +205,7 @@ def wrap_module(module):
         module.socket.socket = socksocket
     else:
         raise GeneralProxyError("No default proxy specified")
+
 
 wrapmodule = wrap_module
 
@@ -252,7 +259,7 @@ def create_connection(dest_pair,
             sock.connect((remote_host, remote_port))
             return sock
 
-        except (socket.error, ProxyConnectionError) as e:
+        except (socket.error, ProxyError) as e:
             err = e
             if sock:
                 sock.close()
@@ -266,6 +273,7 @@ def create_connection(dest_pair,
 
 class _BaseSocket(socket.socket):
     """Allows Python 2 delegated methods such as send() to be overridden."""
+
     def __init__(self, *pos, **kw):
         _orig_socket.__init__(self, *pos, **kw)
 
@@ -279,6 +287,8 @@ class _BaseSocket(socket.socket):
 
 def _makemethod(name):
     return lambda self, *pos, **kw: self._savedmethods[name](*pos, **kw)
+
+
 for name in ("sendto", "send", "recvfrom", "recv"):
     method = getattr(_BaseSocket, name, None)
 
@@ -533,6 +543,14 @@ class socksocket(_BaseSocket):
             if chosen_auth[1:2] == b"\x02":
                 # Okay, we need to perform a basic username/password
                 # authentication.
+                if not (username and password):
+                    # Although we said we don't support authentication, the
+                    # server may still request basic username/password
+                    # authentication
+                    raise SOCKS5AuthError("No username/password supplied. "
+                                          "Server requested username/password"
+                                          " authentication")
+
                 writer.write(b"\x01" + chr(len(username)).encode()
                              + username
                              + chr(len(password)).encode()
@@ -575,7 +593,7 @@ class socksocket(_BaseSocket):
             if status != 0x00:
                 # Connection failed: server returned an error
                 error = SOCKS5_ERRORS.get(status, "Unknown error")
-                raise SOCKS5Error("{0:#04x}: {1}".format(status, error))
+                raise SOCKS5Error("{:#04x}: {}".format(status, error))
 
             # Get the bound address/port
             bnd = self._read_SOCKS5_address(reader)
@@ -693,7 +711,7 @@ class socksocket(_BaseSocket):
             if status != 0x5A:
                 # Connection failed: server returned an error
                 error = SOCKS4_ERRORS.get(status, "Unknown error")
-                raise SOCKS4Error("{0:#04x}: {1}".format(status, error))
+                raise SOCKS4Error("{:#04x}: {}".format(status, error))
 
             # Get the bound address/port
             self.proxy_sockname = (socket.inet_ntoa(resp[4:]),
@@ -753,7 +771,7 @@ class socksocket(_BaseSocket):
                 "HTTP proxy server did not return a valid HTTP status")
 
         if status_code != 200:
-            error = "{0}: {1}".format(status_code, status_msg)
+            error = "{}: {}".format(status_code, status_msg)
             if status_code in (400, 403, 405):
                 # It's likely that the HTTP proxy server does not support the
                 # CONNECT tunneling method
@@ -766,13 +784,13 @@ class socksocket(_BaseSocket):
         self.proxy_peername = addr, dest_port
 
     _proxy_negotiators = {
-                           SOCKS4: _negotiate_SOCKS4,
-                           SOCKS5: _negotiate_SOCKS5,
-                           HTTP: _negotiate_HTTP
-                         }
+        SOCKS4: _negotiate_SOCKS4,
+        SOCKS5: _negotiate_SOCKS5,
+        HTTP: _negotiate_HTTP
+    }
 
     @set_self_blocking
-    def connect(self, dest_pair):
+    def connect(self, dest_pair, catch_errors=None):
         """
         Connects to the specified destination through a proxy.
         Uses the same API as socket's connect().
@@ -834,14 +852,17 @@ class socksocket(_BaseSocket):
         except socket.error as error:
             # Error while connecting to proxy
             self.close()
-            proxy_addr, proxy_port = proxy_addr
-            proxy_server = "{0}:{1}".format(proxy_addr, proxy_port)
-            printable_type = PRINTABLE_PROXY_TYPES[proxy_type]
+            if not catch_errors:
+                proxy_addr, proxy_port = proxy_addr
+                proxy_server = "{}:{}".format(proxy_addr, proxy_port)
+                printable_type = PRINTABLE_PROXY_TYPES[proxy_type]
 
-            msg = "Error connecting to {0} proxy {1}".format(printable_type,
-                                                             proxy_server)
-            log.debug("%s due to: %s", msg, error)
-            raise ProxyConnectionError(msg, error)
+                msg = "Error connecting to {} proxy {}".format(printable_type,
+                                                               proxy_server)
+                log.debug("%s due to: %s", msg, error)
+                raise ProxyConnectionError(msg, error)
+            else:
+                raise error
 
         else:
             # Connected to proxy server, now negotiate
@@ -850,12 +871,31 @@ class socksocket(_BaseSocket):
                 negotiate = self._proxy_negotiators[proxy_type]
                 negotiate(self, dest_addr, dest_port)
             except socket.error as error:
-                # Wrap socket errors
-                self.close()
-                raise GeneralProxyError("Socket error", error)
+                if not catch_errors:
+                    # Wrap socket errors
+                    self.close()
+                    raise GeneralProxyError("Socket error", error)
+                else:
+                    raise error
             except ProxyError:
                 # Protocol error while negotiating with proxy
                 self.close()
+                raise
+
+    @set_self_blocking
+    def connect_ex(self, dest_pair):
+        """ https://docs.python.org/3/library/socket.html#socket.socket.connect_ex
+        Like connect(address), but return an error indicator instead of raising an exception for errors returned by the C-level connect() call (other problems, such as "host not found" can still raise exceptions).
+        """
+        try:
+            self.connect(dest_pair, catch_errors=True)
+            return 0
+        except OSError as e:
+            # If the error is numeric (socket errors are numeric), then return number as
+            # connect_ex expects. Otherwise raise the error again (socket timeout for example)
+            if e.errno:
+                return e.errno
+            else:
                 raise
 
     def _proxy_addr(self):
@@ -868,3 +908,4 @@ class socksocket(_BaseSocket):
         if not proxy_port:
             raise GeneralProxyError("Invalid proxy type")
         return proxy_addr, proxy_port
+

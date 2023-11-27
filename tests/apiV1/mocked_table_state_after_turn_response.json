@@ -1,0 +1,40 @@
+{
+    "data": {
+        "table": 27,
+        "maxtime": 120,
+        "board": ["3T", "8T", "DC", "VT", ""],
+        "maxbet": 0,
+        "pot": 4,
+        "result": null,
+        "players": {
+            "1": {
+                "name": "anonymous",
+                "stack": 28,
+                "position": 1,
+                "button": true,
+                "bet": 0,
+                "card1": "AP",
+                "card2": "8K",
+                "turn": false,
+                "timer": 0
+            },
+            "2": {
+                "name": "anonymous",
+                "stack": 28,
+                "position": 2,
+                "button": false,
+                "bet": 0,
+                "card1": "back",
+                "card2": "back",
+                "turn": true,
+                "timer": 1698762714,
+                "timeleft": 99,
+                "timeleftSec": 119
+            }
+        },
+        "myturn": false,
+        "mybet": 0,
+        "mystack": 28
+    },
+    "messages": []
+}

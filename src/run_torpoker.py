@@ -2,16 +2,22 @@ import os
 import re
 import sys
 
+
+
+
 try:
     from PyQt5.QtWidgets import (QMainWindow, QApplication)
     from PyQt5.QtGui import QPixmap, QImage
     from PyQt5 import QtCore
 except ImportError:
     sys.exit("PyQt5 has not been found. Setup process can be found on README")
-from UI import home_page
-from UI_Utils import JoinList, RequestThread
+from src.UI import home_page
+from src.UI_Utils import JoinList
+from src.UI_Utils import RequestThread
 
-CARDS_DIRECTORY = 'UI/images/41x60/'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CARDS_DIRECTORY = os.path.join(BASE_DIR, 'UI', 'images', '41x60')
+
 CARDS = {}
 
 
